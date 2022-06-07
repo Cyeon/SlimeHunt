@@ -25,9 +25,11 @@ public class GameMgr : MonoBehaviour
 
     // 오브젝트 풀에 생성할 몬스터 최대 갯수
     public int maxMonsters = 10;
-
+    public int curMonsters=10;
     // 게임의 종료 여부를 저장하는 멤버 변수
     private bool isGameOver;
+
+    private float timer = 0f;
 
     public bool IsGameOver
     {
@@ -35,7 +37,7 @@ public class GameMgr : MonoBehaviour
         set
         {
             isGameOver = value;
-            if(isGameOver)
+            if (isGameOver)
             {
                 CancelInvoke("CreateMonster");
             }
@@ -46,11 +48,11 @@ public class GameMgr : MonoBehaviour
 
     public static GameMgr GetInstance()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = FindObjectOfType<GameMgr>();
 
-            if( instance == null )
+            if (instance == null)
             {
                 GameObject container = new GameObject("GameMgr");
                 instance = container.AddComponent<GameMgr>();
@@ -81,14 +83,28 @@ public class GameMgr : MonoBehaviour
 
         //Transform[] pointArray = spawnPointGroup.GetComponentsInChildren<Transform>(true);
 
-        foreach(Transform item in spawnPointGroup)
+        foreach (Transform item in spawnPointGroup)
         {
             points.Add(item);
         }
 
         // 일정 시간 간격으로 호출
         InvokeRepeating("CreateMonster", 2.0f, createTime);
-
+        InvokeRepeating("IncreaseMaxmonster", 61.0f, 60f);
+    }
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (curMonsters < maxMonsters)
+        {
+            CreateMonsterPool();
+        }
+    }
+    void IncreaseMaxmonster()
+    {
+        int time = (int)timer / 60;
+        int l = (int)Mathf.Log10(time*10);
+        maxMonsters += l;
     }
 
     void CreateMonster()
@@ -106,7 +122,8 @@ public class GameMgr : MonoBehaviour
 
     void CreateMonsterPool()
     {
-        for(int i=0; i<maxMonsters; ++i)
+        int createCount = maxMonsters - curMonsters;
+        for (int i = 0; i < createCount; ++i)
         {
             // 몬스터 생성
             var _monster = Instantiate<GameObject>(monster);
@@ -119,11 +136,12 @@ public class GameMgr : MonoBehaviour
 
             monsterPool.Add(_monster);
         }
+        curMonsters = maxMonsters;
     }
 
     public GameObject GetMonsterInPool()
     {
-        foreach(var _monster in monsterPool )
+        foreach (var _monster in monsterPool)
         {
             if (_monster.activeSelf == false)
                 return _monster;
