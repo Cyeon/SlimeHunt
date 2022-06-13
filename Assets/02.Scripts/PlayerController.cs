@@ -85,6 +85,14 @@ public class PlayerController : MonoBehaviour
                 PlayerDie();
             }
         }
+
+
+        if (other.CompareTag("HEAL"))
+        {
+            currHp += 15f;
+            if (currHp >= initHp) { currHp = initHp; }
+            DisplayHP();
+        }
     }
 
     void PlayerDie()

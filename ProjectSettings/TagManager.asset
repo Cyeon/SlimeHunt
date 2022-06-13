@@ -10,6 +10,7 @@ TagManager:
   - PUNCH
   - MONSTER
   - HPBAR
+  - HEAL
   layers:
   - Default
   - TransparentFX
