@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class QuestManager : MonoBehaviour
 {
     public GameObject questPanel = null;
+    public GameObject questText = null;
+    
     public GameObject summaryPanel = null;
     public List<QuestData> questList = new List<QuestData>();
 
@@ -15,12 +17,12 @@ public class QuestManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
 
     private void SetNewQuest()

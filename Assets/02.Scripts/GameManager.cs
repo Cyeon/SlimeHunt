@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public int maxMonsters = 10;
     public int curMonsters = 10;
-    public GameObject monster;
+    public List<GameObject> monsters = new List<GameObject>();
 
     private float timer = 0f;
     private bool isGameOver = false;
@@ -56,12 +56,25 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        
+        CreateMonsterPool();
+        Transform spawnPointGroup = GameObject.Find("SpawnPointGroup")?.transform;
+        foreach (Transform item in spawnPointGroup)
+        {
+            points.Add(item);
+        }
+        InvokeRepeating("CreateMonster", 2.0f, createTime);
+        InvokeRepeating("IncreaseMaxmonster", 61.0f, 60f);
 
     }
 
     void Update()
     {
-
+        timer += Time.deltaTime;
+        if (curMonsters < maxMonsters)
+        {
+            CreateMonsterPool();
+        }
     }
 
     void CreateMonster()
@@ -83,8 +96,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < createCount; ++i)
         {
             // 몬스터 생성
-            var _monster = Instantiate<GameObject>(monster);
-
+            //            var _monster = Instantiate<GameObject>(monster);
+            var _monster = Instantiate(monsters[Random.Range(0, monsters.Count)]);
             // 몬스터 이름 지정
             _monster.name = $"Monster_{i:00}";
 
