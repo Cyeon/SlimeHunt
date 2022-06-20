@@ -19,10 +19,12 @@ public class FireCtrl : MonoBehaviour
     // Muzzle flashÀÇ Mesh Renderer ÄÄÆ÷³ÍÆ® Ä³½Ì
     private MeshRenderer muzzleFlash;
 
+    private Animator animator;
+
     private void Start()
     {
         audio = GetComponent<AudioSource>();
-
+        animator = GetComponent<Animator>();
         muzzleFlash = firePos.GetComponentInChildren<MeshRenderer>();
         muzzleFlash.enabled = false;
     }
@@ -44,6 +46,7 @@ public class FireCtrl : MonoBehaviour
         audio.PlayOneShot(fireSfx, 1.0f);
 
         StartCoroutine(ShowMuzzleFlash());
+        animator.SetTrigger("Fire");
     }
 
     IEnumerator ShowMuzzleFlash()
@@ -58,8 +61,8 @@ public class FireCtrl : MonoBehaviour
         muzzleFlash.transform.localRotation = Quaternion.Euler(Vector3.forward * angle);
 
         // Å©±â
-        float scale = Random.Range(0.5f, 1.0f);
-        muzzleFlash.transform.localScale = Vector3.one * scale;
+        //float scale = Random.Range(0.5f, 1.0f);
+        //muzzleFlash.transform.localScale = Vector3.one * scale;
 
         muzzleFlash.enabled = true;
 

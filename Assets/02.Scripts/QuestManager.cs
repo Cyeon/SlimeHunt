@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class QuestManager : MonoBehaviour
 {
-    public GameObject questPanel = null;
-    public GameObject questText = null;
+    public TextMeshProUGUI questText = null;
     
-    public GameObject summaryPanel = null;
     public List<QuestData> questList = new List<QuestData>();
 
     private Text questContents = null;
@@ -17,26 +16,6 @@ public class QuestManager : MonoBehaviour
 
     void Start()
     {
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    private void SetNewQuest()
-    {
-
-    }
-
-    private void CompleteQuest()
-    {
-
-    }
-
-    private void SetQuestUI()
-    {
-
+        questText = GetComponent<TextMeshProUGUI>();
     }
 }

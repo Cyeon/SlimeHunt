@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 80.0f;
 
     private Transform playerTransform;
-    private Animation playerAnim;
+    //private Animation playerAnim;
+    private Animator animator;
 
     // 초기 생명 값
     private readonly float initHp = 100.0f;
@@ -23,9 +24,10 @@ public class PlayerController : MonoBehaviour
     IEnumerator Start()
     {
         playerTransform = GetComponent<Transform>();
-        playerAnim = GetComponent<Animation>();
+        animator = GetComponent<Animator>();
+        //playerAnim = GetComponent<Animation>();
 
-        playerAnim.Play("Idle");
+        //playerAnim.Play("Idle");
 
         rotationSpeed = 0.0f;
         yield return new WaitForSeconds(0.3f);
@@ -44,6 +46,10 @@ public class PlayerController : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+
+        animator.SetFloat("Horizontal", h);
+        animator.SetFloat("Speed", v);
+
         float r = Input.GetAxis("Mouse X");
 
         Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);
@@ -53,26 +59,26 @@ public class PlayerController : MonoBehaviour
 
         transform.Rotate(Vector3.up * r * rotationSpeed * Time.deltaTime);
 
-        PlayerAnimation(h, v);
+        //PlayerAnimation(h, v);
     }
 
-    void PlayerAnimation(float h, float v)
-    {
-        if (h <= -0.1f)
-            playerAnim.CrossFade("RunL", 0.25f);
-        else if (h >= 0.1f)
-            playerAnim.CrossFade("RunR", 0.25f);
-        else if (v <= -0.1f)
-            playerAnim.CrossFade("RunB", 0.25f);
-        else if (v >= 0.1f)
-            playerAnim.CrossFade("RunF", 0.25f);
-        else
-            playerAnim.CrossFade("Idle", 0.25f);
-    }
+    //void PlayerAnimation(float h, float v)
+    //{
+    //    if (h <= -0.1f)
+    //        playerAnim.CrossFade("RunL", 0.25f);
+    //    else if (h >= 0.1f)
+    //        playerAnim.CrossFade("RunR", 0.25f);
+    //    else if (v <= -0.1f)
+    //        playerAnim.CrossFade("RunB", 0.25f);
+    //    else if (v >= 0.1f)
+    //        playerAnim.CrossFade("RunF", 0.25f);
+    //    else
+    //        playerAnim.CrossFade("Idle", 0.25f);
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
-        if( other.CompareTag("PUNCH") && currHp >= 0.0f)
+        if (other.CompareTag("PUNCH") && currHp >= 0.0f)
         {
             currHp -= 10.0f;
             Debug.Log($"Player HP = {currHp}");
@@ -80,7 +86,7 @@ public class PlayerController : MonoBehaviour
             // HP 표시
             DisplayHP();
 
-            if ( currHp <= 0.0f )
+            if (currHp <= 0.0f)
             {
                 PlayerDie();
             }
@@ -100,7 +106,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player Die!");
 
         GameObject[] monsters = GameObject.FindGameObjectsWithTag("MONSTER");
-        foreach(GameObject monster in monsters )
+        foreach (GameObject monster in monsters)
         {
             monster.SendMessage("OnPlayerDie", SendMessageOptions.DontRequireReceiver);
         }
