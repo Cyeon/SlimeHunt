@@ -22,6 +22,7 @@ public class BulletCtrl : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        //Debug.Log(collision.gameObject.name);
+        Destroy(gameObject,0.5f);
     }
 }

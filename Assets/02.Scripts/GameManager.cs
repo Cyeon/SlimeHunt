@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public int maxMonsters = 10;
-    public int curMonsters = 10;
+    public int curMonsters = 0;
     public List<GameObject> monsters = new List<GameObject>();
 
     private float timer = 0f;
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         
         CreateMonsterPool();
-        Transform spawnPointGroup = GameObject.Find("SpawnPointGroup")?.transform;
+        Transform spawnPointGroup = GameObject.Find("Points")?.transform;
         foreach (Transform item in spawnPointGroup)
         {
             points.Add(item);
@@ -95,9 +95,10 @@ public class GameManager : MonoBehaviour
         int createCount = maxMonsters - curMonsters;
         for (int i = 0; i < createCount; ++i)
         {
+            int ran = Random.Range(0, monsters.Count);
             // 몬스터 생성
             //            var _monster = Instantiate<GameObject>(monster);
-            var _monster = Instantiate(monsters[Random.Range(0, monsters.Count)]);
+            var _monster = Instantiate(monsters[ran]); 
             // 몬스터 이름 지정
             _monster.name = $"Monster_{i:00}";
 
