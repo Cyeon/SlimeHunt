@@ -20,14 +20,10 @@ public class PlayerController : MonoBehaviour
     // Hpbar 이미지 연결
     private Image hpBar;
 
-    // Start is called before the first frame update
     IEnumerator Start()
     {
         playerTransform = GetComponent<Transform>();
         animator = GetComponent<Animator>();
-        //playerAnim = GetComponent<Animation>();
-
-        //playerAnim.Play("Idle");
 
         rotationSpeed = 0.0f;
         yield return new WaitForSeconds(0.3f);
@@ -41,7 +37,6 @@ public class PlayerController : MonoBehaviour
         DisplayHP();
     }
 
-    // Update is called once per frame
     void Update()
     {
         float h = Input.GetAxis("Horizontal");
@@ -59,22 +54,7 @@ public class PlayerController : MonoBehaviour
 
         transform.Rotate(Vector3.up * r * rotationSpeed * Time.deltaTime);
 
-        //PlayerAnimation(h, v);
     }
-
-    //void PlayerAnimation(float h, float v)
-    //{
-    //    if (h <= -0.1f)
-    //        playerAnim.CrossFade("RunL", 0.25f);
-    //    else if (h >= 0.1f)
-    //        playerAnim.CrossFade("RunR", 0.25f);
-    //    else if (v <= -0.1f)
-    //        playerAnim.CrossFade("RunB", 0.25f);
-    //    else if (v >= 0.1f)
-    //        playerAnim.CrossFade("RunF", 0.25f);
-    //    else
-    //        playerAnim.CrossFade("Idle", 0.25f);
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -91,7 +71,6 @@ public class PlayerController : MonoBehaviour
                 PlayerDie();
             }
         }
-
 
         if (other.CompareTag("HEAL"))
         {
@@ -112,7 +91,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // 게임 종료
-        GameMgr.GetInstance().IsGameOver = true;
+        GameManager.GetInstance().IsGameOver = true;
     }
 
     void DisplayHP()

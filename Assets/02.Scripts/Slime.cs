@@ -38,6 +38,11 @@ public class Slime : MonoBehaviour
     private NavMeshAgent agent;
     private Animator anim;
 
+    private readonly int hashTrace = Animator.StringToHash("Jump");
+    private readonly int hashAttack = Animator.StringToHash("Attack");
+    private readonly int hashHit = Animator.StringToHash("Damage");
+    private readonly int hashDie = Animator.StringToHash("Die");
+
     void Awake()
     {
         monsterTransform = GetComponent<Transform>();
@@ -118,22 +123,26 @@ public class Slime : MonoBehaviour
             {
                 case State.IDLE:
                     agent.isStopped = true;
+                    anim.SetBool(hashTrace, false);
                     SetFace(faces.Idleface);
                     break;
                 case State.TRACE:
                     agent.SetDestination(targetTransform.position);
                     agent.isStopped = false;
                     SetFace(faces.WalkFace);
+                    anim.SetBool(hashTrace, true);
+                    anim.SetBool(hashAttack, false);
                     break;
                 case State.ATTACK:
                     SetFace(faces.attackFace);
-                    anim.SetTrigger("Attack");
+                    transform.LookAt(targetTransform);
+                    anim.SetBool(hashAttack, true);
                     break;
                 case State.DIE:
                     isDie = true;
                     agent.isStopped = true;
                     SetFace(faces.damageFace);
-                    anim.SetTrigger("Damage");
+                    anim.SetTrigger(hashDie);
                     GetComponent<SphereCollider>().enabled = false;
                     yield return new WaitForSeconds(3.0f);
                     gameObject.SetActive(false);
