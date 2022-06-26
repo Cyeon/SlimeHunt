@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private List<Transform> healPoints = new List<Transform>();
     [SerializeField]
     private List<GameObject> monsterPool = new List<GameObject>();
+
     public bool IsGameOver
     {
         get { return isGameOver; }
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
             if (isGameOver)
             {
                 CancelInvoke("CreateMonster");
+                GetComponent<LoadScenes>().LoadGameOver();
             }
         }
     }
@@ -86,6 +88,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        isFinalQuest = false;
+        isGameClear = false;
+        isGameOver = false;
 
         CreateMonsterPool();
         Transform spawnPointGroup = GameObject.Find("Points")?.transform;

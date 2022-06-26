@@ -9,12 +9,15 @@ public class QuestManager : MonoBehaviour
 
     public List<QuestData> questList = new List<QuestData>();
 
+    [SerializeField] 
+    private int index = 0;
     private int monsterCounts = 0;
-    [SerializeField] private int index = 0;
     private QuestData curQuestData = null;
 
     void Start()
     {
+        index = 0;
+        monsterCounts = 0;
         curQuestData = questList[index];
         SetQuestText();
     }
