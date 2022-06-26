@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+using UnityEngine.Events;
 public class Slime : MonoBehaviour
 {
     public enum State
@@ -26,6 +26,7 @@ public class Slime : MonoBehaviour
     public int monsterId = 0;
     public Face faces;
     public GameObject SmileBody;
+    public UnityEvent SlimeDie;
 
     [SerializeField]
     private int initHp = 30;
@@ -46,9 +47,7 @@ public class Slime : MonoBehaviour
     void Awake()
     {
         monsterTransform = GetComponent<Transform>();
-
         targetTransform = GameObject.FindWithTag("PLAYER").GetComponent<Transform>();
-
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         faceMaterial = SmileBody.GetComponent<Renderer>().materials[1];
@@ -59,12 +58,14 @@ public class Slime : MonoBehaviour
 
         currHp = initHp;
         isDie = false;
+        GetComponent<SphereCollider>().enabled = true;
+        GetComponentInChildren<SphereCollider>().enabled = true;
         // 몬스터의 상태를 체크하는 코루틴 함수
         StartCoroutine(CheckMonsterState());
         // 상태에 따라 몬스터의 행동을 수행하는 코루틴 함수
         StartCoroutine(MonsterAction());
-
     }
+
     void Update()
     {
         if (agent.remainingDistance >= 2.0f)
@@ -115,6 +116,7 @@ public class Slime : MonoBehaviour
             }
         }
     }
+
     IEnumerator MonsterAction()
     {
         while (!isDie)
@@ -144,7 +146,9 @@ public class Slime : MonoBehaviour
                     SetFace(faces.damageFace);
                     anim.SetTrigger(hashDie);
                     GetComponent<SphereCollider>().enabled = false;
-                    yield return new WaitForSeconds(3.0f);
+                    GetComponentInChildren<SphereCollider>().enabled = false;
+                    SlimeDie.Invoke();
+                    yield return new WaitForSeconds(1.0f);
                     gameObject.SetActive(false);
                     break;
                 case State.PLAYERDIE:
@@ -162,7 +166,7 @@ public class Slime : MonoBehaviour
         if (collision.collider.CompareTag("BULLET"))
         {
             Destroy(collision.gameObject);
-
+            anim.SetTrigger(hashHit);
             // 몬스터의 hp 차감
             currHp -= 10;
             if (currHp <= 0)

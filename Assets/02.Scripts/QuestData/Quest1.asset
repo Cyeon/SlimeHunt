@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   maxMonster: 5
-  monsterId: 0
-  questText: 
+  monsterId: -1
+  questText: "\uC2AC\uB77C\uC784 5\uB9C8\uB9AC \uC7A1\uAE30"

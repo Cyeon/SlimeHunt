@@ -61,6 +61,11 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("PUNCH") && currHp >= 0.0f)
         {
             currHp -= 10.0f;
+            if (other.GetComponentInParent<Slime>().monsterId == 5)
+            {
+                currHp -= 20;
+            }
+
             Debug.Log($"Player HP = {currHp}");
 
             // HP Ç¥½Ã
@@ -74,8 +79,10 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("HEAL"))
         {
+            if (currHp >= initHp) { return; }
             currHp += 15f;
             if (currHp >= initHp) { currHp = initHp; }
+            Destroy(other.gameObject);
             DisplayHP();
         }
     }
