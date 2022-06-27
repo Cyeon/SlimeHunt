@@ -18,12 +18,11 @@ public class LoadScenes : MonoBehaviour
     }
     public void LoadTitle()
     {
-        Debug.Log("t");
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Title");
     }
     public void Exit()
     {
-        Debug.Log("q");
         Application.Quit();
     }
 }
